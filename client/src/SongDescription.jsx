@@ -8,17 +8,22 @@ class SongDescription extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      songId: null,
-      description: 'This is a placeholder'
+      description: null
     }
     this.updateDescription = this.updateDescription.bind(this);
+    this.getIdAndUpdateDOM = this.getIdAndUpdateDOM.bind(this);
+
+    this.getIdAndUpdateDOM();
   }
 
   updateDescription(data) {
-    // do stuff
+    console.log('Here is the data sent to updateDescription: ', data);
+    this.setState({
+      description: data.description
+    });
   }
 
-  componentDidMount() {
+  getIdAndUpdateDOM() {
     let splitUrl = window.location.pathname.split('/');
     let songId = splitUrl.filter(function(id) {
       return parseInt(id);
@@ -35,7 +40,7 @@ class SongDescription extends React.Component {
   render() {
     return (
       <div className="cam song-description">
-        <p> {this.state.description} </p>
+        <p className="description"> {this.state.description} </p>
       </div>
     )
   }

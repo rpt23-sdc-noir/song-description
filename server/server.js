@@ -22,8 +22,18 @@ app.get('/songDescription/:songId', async(req, res) => {
       return res.status(400).json({
         success: false,
         msg: `No description for songId: ${req.params.songId}`
-      })
+      });
     }
+    res.status(200).send({
+      success: true,
+      data: description
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({
+      success: false,
+      msg: error
+    });
   }
 });
 

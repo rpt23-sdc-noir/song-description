@@ -9,7 +9,7 @@ const seedDatabase = async() => {
       songId: i + 1,
       bandId: i + 1,
       bandName: bands.bandNames[i],
-      description: `Recorded, mixed, and mastered at ${studios.studioNames[i]} Studios. Produced by ${bands.bandNames[i]}. © 2020 ${bands.bandNames[i]}. All rights reserved`
+      description: `Recorded, mixed, and mastered at ${studios.studioNames[i]} Studios. Produced by ${bands.bandNames[i]}. © 2020 ${bands.bandNames[i]}. All rights reserved.`
     }
     database.saveDescriptions(descriptionObj)
       .then((response) => {
