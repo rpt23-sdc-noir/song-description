@@ -1,44 +1,32 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import axios from 'axios';
+const express = require('express');
+const app = express();
+const path = require('path');
+const chalk = require('chalk');
+const bodyParser = require('body-parser');
+const db = require('../database/db.js');
+const cors = require('cors');
+const port = 2001;
 
-// ----------------------------------------- //
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(cors());
+// app.get('/bundle.js', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../client/bundle.js'));
+// });
+app.use('/:songId', express.static(path.join(__dirname, '../client')));
 
-class SongDescription extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      songId: null,
-      description: 'This is a placeholder'
-    }
-    this.updateDescription = this.updateDescription.bind(this);
-  }
-
-  updateDescription(data) {
-    // do stuff
-  }
-
-  componentDidMount() {
-    let splitUrl = window.location.pathname.split('/');
-    let songId = splitUrl.filter(function(id) {
-      return parseInt(id);
-    });
-    axios.get(`/songDescription/${songId}`)
-      .then((response) => {
-        this.updateDescription(response.data.data);
+app.get('/songDescription/:songId', async(req, res) => {
+  try {
+    const description = await db.findDescription(req.params.songId);
+    if(!description) {
+      return res.status(400).json({
+        success: false,
+        msg: `No description for songId: ${req.params.songId}`
       })
-      .catch((error) => {
-        console.log('Error rendering initial song description: ', error);
-      });
+    }
   }
+});
 
-  render() {
-    return (
-      <div className="cam song-description">
-        <p> {this.state.description} </p>
-      </div>
-    )
-  }
-}
-
-export default SongDescription;
+app.listen(port, () => {
+  console.log(chalk.magenta(`Server running on port at http://localhost:${port}`));
+});

@@ -1,13 +1,15 @@
 # Project Name
 
-> Project description
+> Fake SoundCloud App - Song Description Module
 
 ## Related Projects
 
-  - https://github.com/teamName/repo
-  - https://github.com/teamName/repo
-  - https://github.com/teamName/repo
-  - https://github.com/teamName/repo
+  - https://github.com/lions-beside-us/soundcloudplayer
+  - https://github.com/lions-beside-us/soundcloud-images
+  - https://github.com/lions-beside-us/comments-service
+  - https://github.com/lions-beside-us/hashtags-service
+  - https://github.com/lions-beside-us/user-service
+  - https://github.com/lions-beside-us/soundcloud-related-tracks
 
 ## Table of Contents
 
