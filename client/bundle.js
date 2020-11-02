@@ -148,9 +148,6 @@ var SongDescription = /*#__PURE__*/function (_React$Component) {
     };
     _this.updateDescription = _this.updateDescription.bind(_assertThisInitialized(_this));
     _this.getIdAndUpdateDOM = _this.getIdAndUpdateDOM.bind(_assertThisInitialized(_this));
-
-    _this.getIdAndUpdateDOM();
-
     return _this;
   }
 
@@ -179,11 +176,18 @@ var SongDescription = /*#__PURE__*/function (_React$Component) {
       });
     }
   }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.getIdAndUpdateDOM();
+    }
+  }, {
     key: "render",
     value: function render() {
       return /*#__PURE__*/_react["default"].createElement("div", {
         className: "cam song-description"
-      }, /*#__PURE__*/_react["default"].createElement("p", null, " ", this.state.description, " "));
+      }, /*#__PURE__*/_react["default"].createElement("p", {
+        className: "description"
+      }, " ", this.state.description, " "));
     }
   }]);
 
@@ -2098,7 +2102,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.i, "", ""]);
+___CSS_LOADER_EXPORT___.push([module.i, "p {\n  font-size: 14px;\n  color: #333333;\n  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;\n  margin: 0 0 10px;\n  display: block;\n  margin-block-start: 1em;\n  margin-block-end: 1em;\n  margin-inline-start: 0px;\n  margin-inline-end: 0px;\n  height: 38px;\n  width: 669px;\n}", ""]);
 // Exports
 /* harmony default export */ __webpack_exports__["default"] = (___CSS_LOADER_EXPORT___);
 

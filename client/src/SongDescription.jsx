@@ -12,8 +12,6 @@ class SongDescription extends React.Component {
     }
     this.updateDescription = this.updateDescription.bind(this);
     this.getIdAndUpdateDOM = this.getIdAndUpdateDOM.bind(this);
-
-    this.getIdAndUpdateDOM();
   }
 
   updateDescription(data) {
@@ -35,6 +33,10 @@ class SongDescription extends React.Component {
       .catch((error) => {
         console.log('Error rendering initial song description: ', error);
       });
+  }
+
+  componentDidMount() {
+    this.getIdAndUpdateDOM();
   }
 
   render() {
