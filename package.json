@@ -7,7 +7,7 @@
     "seedDB": "node seedScript.js",
     "build": "webpack --mode=development -d --watch",
     "start": "nodemon server/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -37,7 +37,10 @@
     "@babel/preset-env": "^7.12.1",
     "@babel/preset-react": "^7.12.1",
     "babel-loader": "^8.0.0-beta.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "css-loader": "^5.0.0",
+    "mocha": "^8.2.0",
     "style-loader": "^2.0.0",
     "webpack": "^4.44.2",
     "webpack-cli": "^4.1.0"

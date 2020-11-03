@@ -18,7 +18,7 @@ app.use('/:songId', express.static(path.join(__dirname, '../client')));
 app.get('/songDescription/:songId', async(req, res) => {
   try {
     const description = await db.findDescription(req.params.songId);
-    if(!description) {
+    if (!description) {
       return res.status(400).json({
         success: false,
         msg: `No description for songId: ${req.params.songId}`
@@ -37,6 +37,12 @@ app.get('/songDescription/:songId', async(req, res) => {
   }
 });
 
+app.get('/:current', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/index.html'));
+});
+
 app.listen(port, () => {
   console.log(chalk.magenta(`Server running on port at http://localhost:${port}`));
 });
+
+module.exports = app;
