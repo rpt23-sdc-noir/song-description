@@ -6,15 +6,23 @@ const bodyParser = require('body-parser');
 const db = require('../database/db.js');
 const cors = require('cors');
 const port = 2001;
+const expressStaticGzip = require('express-static-gzip');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors());
 app.get('/bundle.js', (req, res) => {
-  console.log('Are we hitting this?');
   res.sendFile(path.join(__dirname, '../client/bundle.js'));
 });
-app.use('/:songId', express.static(path.join(__dirname, '../client')));
+// app.use('/:songId', express.static(path.join(__dirname, '../client')));
+
+app.use('/', expressStaticGzip(path.join(__dirname, '../client'), {
+  enableBrotli: true,
+  orderPreference: ['br', 'gz'],
+  setHeaders: function (res, path) {
+    res.setHeader("Cache-Control", "client, max-age=31536000");
+  }
+}));
 
 app.get('/songDescription/:songId', async(req, res) => {
   try {
