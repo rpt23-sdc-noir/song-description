@@ -26,8 +26,10 @@ class SongDescription extends React.Component {
     let songId = splitUrl.filter(function(id) {
       return parseInt(id);
     });
+    console.log('Song ID: ', songId);
     axios.get(`/songDescription/${songId}`)
       .then((response) => {
+        console.log('Data: ', response.data.data);
         this.updateDescription(response.data.data);
       })
       .catch((error) => {
