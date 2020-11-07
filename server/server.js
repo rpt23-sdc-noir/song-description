@@ -14,7 +14,7 @@ app.use(cors());
 app.get('/bundle.js', cors(), (req, res) => {
   res.sendFile(path.join(__dirname, '../client/bundle.js'));
 });
-// app.use('/:songId', express.static(path.join(__dirname, '../client')));
+app.use('/:songId', express.static(path.join(__dirname, '../client')));
 
 app.use('/', expressStaticGzip(path.join(__dirname, '../client'), {
   enableBrotli: true,
