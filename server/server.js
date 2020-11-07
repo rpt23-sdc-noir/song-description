@@ -11,7 +11,7 @@ const expressStaticGzip = require('express-static-gzip');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors());
-app.get('/bundle.js', (req, res) => {
+app.get('/bundle.js', cors(), (req, res) => {
   res.sendFile(path.join(__dirname, '../client/bundle.js'));
 });
 // app.use('/:songId', express.static(path.join(__dirname, '../client')));

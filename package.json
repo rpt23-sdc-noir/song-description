@@ -7,7 +7,7 @@
     "seedDB": "node seedScript.js",
     "build": "webpack --mode=development -d --watch",
     "prod": "webpack --mode=production -d --watch",
-    "start": "nodemon server/server.js",
+    "start": "node server/server.js",
     "test": "mocha"
   },
   "repository": {
@@ -26,6 +26,7 @@
     "chalk": "^4.1.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "express-static-gzip": "^2.1.0",
     "favicons": "^6.2.0",
     "mongoose": "^5.10.11",
     "nodemon": "^2.0.6",
@@ -43,6 +44,7 @@
     "chai-http": "^4.3.0",
     "compression-webpack-plugin": "^6.0.5",
     "css-loader": "^5.0.0",
+    "html-webpack-plugin": "^4.5.0",
     "mocha": "^8.2.0",
     "style-loader": "^2.0.0",
     "webpack": "^4.44.2",
