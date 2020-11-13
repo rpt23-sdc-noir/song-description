@@ -1,10 +1,11 @@
 // ----------- DB CONNECTION ---------- //
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/descriptions', {
+mongoose.connect('mongodb://localhost/sdc-descriptions', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useCreateIndex: true
+  useCreateIndex: true,
+  useFindAndModify: false
 });
 
 const db = mongoose.connection;
@@ -49,6 +50,15 @@ const findDescription = function(id) {
     });
 };
 
+const findDescriptionandUpdate = (id, updatedData) => {
+  return Description.findOneAndUpdate({songId: id}, updatedData, {
+    new: true
+  })
+    .catch((error) => {
+      console.log('Error finding song description in db: ', error);
+    });
+};
+
 // ---------- DELETE DESCRIPTIONS --------- //
 
 const deleteDescriptions = function() {
@@ -58,8 +68,17 @@ const deleteDescriptions = function() {
     });
 };
 
+const deleteDescription = (id) => {
+  return Description.deleteOne({songId: id})
+    .catch((error) => {
+      console.log('Error delete song descriptions in database: ', error);
+    });
+}
+
 // --------------- EXPORTS ----------------- //
 
 module.exports.saveDescriptions = saveDescriptions;
 module.exports.findDescription = findDescription;
 module.exports.deleteDescriptions = deleteDescriptions;
+module.exports.deleteDescription = deleteDescription;
+module.exports.findDescriptionandUpdate = findDescriptionandUpdate;
