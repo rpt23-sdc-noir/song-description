@@ -57,7 +57,7 @@ describe('/PUT descriptions', () => {
 });
 
 describe('/DELETE descriptions', () => {
-  it('Should not delete a song description by songId', (done) => {
+  it('Should delete a song description by songId', (done) => {
     chai.request(app)
       .delete('/songDescription/14')
       .end((err, res) => {
