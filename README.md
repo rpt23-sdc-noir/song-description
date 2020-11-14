@@ -11,6 +11,16 @@
   - https://github.com/lions-beside-us/user-service
   - https://github.com/lions-beside-us/soundcloud-related-tracks
 
+## CRUD Operations
+GET /songDescription/:songId returns a JSON object of song description for a single song, given songId
+
+
+POST /songDescription adds a new song to database with data from the request's body
+
+PUT /songDescription/:songId updates information in database for given songId with data from the request's body
+
+DELETE /songDescription/:songId deletes song for given songId from the database
+
 ## Table of Contents
 
 1. [Usage](#Usage)
