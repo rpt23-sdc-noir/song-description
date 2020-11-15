@@ -116,10 +116,7 @@ app.delete('/songDescription/:songId', async(req, res) => {
   }
 });
 
-
-
 // server API requests end
-
 
 app.get('/:current', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/index.html'));
