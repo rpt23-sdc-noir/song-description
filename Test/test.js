@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
-const database = require('../database/db.js');
+// const mongoose = require('mongoose');
+const database = require('../database/db_pg.js');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const app = require('../server/server.js');
+const app = require('../server/server_pg.js');
 
 const should = chai.should();
 chai.use(chaiHttp);
@@ -10,8 +10,6 @@ chai.use(chaiHttp);
 describe('/POST description', () => {
   it('should POST a song description', (done) => {
     let description = {
-      "songId": 14,
-      "bandId": 14,
       "bandName": "sick name toly",
       "description": "sick description bruhhh"
     }
@@ -21,12 +19,10 @@ describe('/POST description', () => {
       .end((err, res) => {
         res.should.have.status(200);
         res.body.data.should.be.an('object');
-        res.body.data.songId.should.be.a('number');
-        res.body.data.songId.should.be.equal(14);
-        res.body.data.bandId.should.be.equal(14);
-        res.body.data.description.should.be.a('string');
-        res.body.data.bandName.should.be.a('string');
-        res.body.data.bandName.should.be.equal('sick name toly');
+        res.body.data.song_id.should.be.a('number');
+        res.body.data.band_description.should.be.a('string');
+        res.body.data.band_name.should.be.a('string');
+        res.body.data.band_name.should.be.equal('sick name toly');
         done();
       });
   });
@@ -39,25 +35,22 @@ describe('/PUT descriptions', () => {
       "description": "its aliveeeeee"
     }
     chai.request(app)
-      .put('/songDescription/14')
+      .put('/songDescription/100')
       .send(description)
       .end((err, res) => {
         res.should.have.status(200);
         res.body.data.should.be.an('object');
-        res.body.data.songId.should.be.a('number');
-        res.body.data.songId.should.be.equal(14);
-        res.body.data.bandId.should.be.equal(14);
-        res.body.data.description.should.be.a('string');
-        res.body.data.bandName.should.be.a('string');
-        res.body.data.bandName.should.be.equal('DOPE name toly');
-        res.body.data.description.should.be.equal('its aliveeeeee');
+        res.body.data.band_description.should.be.a('string');
+        res.body.data.band_name.should.be.a('string');
+        res.body.data.band_name.should.be.equal('DOPE name toly');
+        res.body.data.band_description.should.be.equal('its aliveeeeee');
         done();
       });
   });
 
   it('Should return an error if the song does not exist', (done) => {
     chai.request(app)
-      .get('/songDescription/99999999')
+      .put('/songDescription/99999999')
       .end((err, res) => {
         console.log('Response: ', res.body);
         res.should.have.status(400);
@@ -68,21 +61,25 @@ describe('/PUT descriptions', () => {
 });
 
 describe('/DELETE descriptions', () => {
+  // have to update id for each test
+  const id = 10000032;
+
   it('Should delete a song description by songId', (done) => {
     chai.request(app)
-      .delete('/songDescription/14')
+
+      .delete(`/songDescription/${id}`)
       .end((err, res) => {
         console.log('Response: ', res.body);
         res.should.have.status(200);
         res.body.success.should.be.equal(true);
-        res.body.data.should.be.an('object');
+        res.body.data.should.be.equal('rows deleted: 1');
         done();
       });
   });
 
   it('Should not return a song description after it was deleted', (done) => {
     chai.request(app)
-      .get('/songDescription/14')
+      .get(`/songDescription/${id}`)
       .end((err, res) => {
         console.log('Response: ', res.body);
         res.should.have.status(400);
@@ -93,29 +90,29 @@ describe('/DELETE descriptions', () => {
 
   it('Should return an error if the song does not exist', (done) => {
     chai.request(app)
-      .get('/songDescription/99999999')
+      .delete('/songDescription/99999999')
       .end((err, res) => {
         console.log('Response: ', res.body);
         res.should.have.status(400);
         res.body.success.should.be.equal(false);
         done();
-    });
+      });
   });
 });
 
 describe('/GET descriptions', () => {
-  it('Should return a song description with a songId of 99', (done) => {
+  it('Should return a song description with a songId of 100', (done) => {
     chai.request(app)
-      .get('/songDescription/99')
+      .get('/songDescription/100')
       .end((err, res) => {
         console.log('Response: ', res.body);
         res.should.have.status(200);
         res.body.data.should.be.an('object');
-        res.body.data.songId.should.be.a('number');
-        res.body.data.songId.should.be.equal(99);
-        res.body.data.bandId.should.be.equal(99);
-        res.body.data.description.should.be.a('string');
-        res.body.data.bandName.should.be.a('string');
+        res.body.data.song_id.should.be.a('number');
+        res.body.data.song_id.should.be.equal(100);
+        res.body.data.band_id.should.be.equal(100);
+        res.body.data.band_description.should.be.a('string');
+        res.body.data.band_name.should.be.a('string');
         done();
       });
   });
