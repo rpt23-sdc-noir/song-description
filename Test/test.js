@@ -54,6 +54,17 @@ describe('/PUT descriptions', () => {
         done();
       });
   });
+
+  it('Should return an error if the song does not exist', (done) => {
+    chai.request(app)
+      .get('/songDescription/99999999')
+      .end((err, res) => {
+        console.log('Response: ', res.body);
+        res.should.have.status(400);
+        res.body.success.should.be.equal(false);
+        done();
+    });
+  });
 });
 
 describe('/DELETE descriptions', () => {
@@ -79,6 +90,17 @@ describe('/DELETE descriptions', () => {
         done();
     });
   });
+
+  it('Should return an error if the song does not exist', (done) => {
+    chai.request(app)
+      .get('/songDescription/99999999')
+      .end((err, res) => {
+        console.log('Response: ', res.body);
+        res.should.have.status(400);
+        res.body.success.should.be.equal(false);
+        done();
+    });
+  });
 });
 
 describe('/GET descriptions', () => {
@@ -94,19 +116,18 @@ describe('/GET descriptions', () => {
         res.body.data.bandId.should.be.equal(99);
         res.body.data.description.should.be.a('string');
         res.body.data.bandName.should.be.a('string');
-        res.body.data.bandName.should.be.equal('The Fearsome Onrush');
         done();
       });
   });
 
-  it('it should return an error if input songId is 101', () => {
+  it('it should return an error if input songId is 99999999', () => {
     chai.request(app)
-      .get('/songDescription/101')
+      .get('/songDescription/99999999')
       .end((err, res) => {
         console.log(res.body);
         res.should.have.status(400);
         res.body.msg.should.be.a('string');
-        res.body.msg.should.be.equal('No description for songId: 101');
+        res.body.msg.should.be.equal('No description for songId: 99999999');
       });
   });
 });
