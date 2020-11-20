@@ -104,5 +104,7 @@ dist
 .tern-port
 
 client/bundle.js
+client/bundle.js.br
+client/bundle.js.gz
 
 seed.csv
