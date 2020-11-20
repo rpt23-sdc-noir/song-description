@@ -50,11 +50,7 @@ describe('/PUT descriptions', () => {
 
   it('Should return an error if the song does not exist', (done) => {
     chai.request(app)
-<<<<<<< HEAD
       .put('/songDescription/99999999')
-=======
-      .get('/songDescription/99999999')
->>>>>>> main
       .end((err, res) => {
         console.log('Response: ', res.body);
         res.should.have.status(400);
@@ -94,21 +90,13 @@ describe('/DELETE descriptions', () => {
 
   it('Should return an error if the song does not exist', (done) => {
     chai.request(app)
-<<<<<<< HEAD
       .delete('/songDescription/99999999')
-=======
-      .get('/songDescription/99999999')
->>>>>>> main
       .end((err, res) => {
         console.log('Response: ', res.body);
         res.should.have.status(400);
         res.body.success.should.be.equal(false);
         done();
-<<<<<<< HEAD
       });
-=======
-    });
->>>>>>> main
   });
 });
 
@@ -120,19 +108,11 @@ describe('/GET descriptions', () => {
         console.log('Response: ', res.body);
         res.should.have.status(200);
         res.body.data.should.be.an('object');
-<<<<<<< HEAD
         res.body.data.song_id.should.be.a('number');
         res.body.data.song_id.should.be.equal(100);
         res.body.data.band_id.should.be.equal(100);
         res.body.data.band_description.should.be.a('string');
         res.body.data.band_name.should.be.a('string');
-=======
-        res.body.data.songId.should.be.a('number');
-        res.body.data.songId.should.be.equal(99);
-        res.body.data.bandId.should.be.equal(99);
-        res.body.data.description.should.be.a('string');
-        res.body.data.bandName.should.be.a('string');
->>>>>>> main
         done();
       });
   });
