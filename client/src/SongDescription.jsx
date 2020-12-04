@@ -17,7 +17,11 @@ class SongDescription extends React.Component {
   updateDescription(data) {
     console.log('Here is the data sent to updateDescription: ', data);
     this.setState({
-      description: data.description
+      // mongo implementation
+      // description: data.description
+
+      // pg implementation
+      description: data.band_description
     });
   }
 

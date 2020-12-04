@@ -1,19 +1,22 @@
-const express = require('express');
+require('newrelic');
+const express = require("express");
+const cors = require("cors");
 const path = require('path');
 const chalk = require('chalk');
-const bodyParser = require('body-parser');
-const db = require('../database/db.js');
-const cors = require('cors');
+const pool = require('../database/db_pg.js');
 const port = 2001;
-const expressStaticGzip = require('express-static-gzip');
+// require('dotenv').config()
 
 const app = express();
 
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.json());
+// middleware
 app.use(cors());
+app.use(express.json());
 
+const expressStaticGzip = require('express-static-gzip');
+const { ProvidePlugin } = require("webpack");
+
+// compression serving files
 app.get('/bundle.js', cors(), (req, res) => {
   res.sendFile(path.join(__dirname, '../client/bundle.js'));
 });
@@ -26,13 +29,13 @@ app.use('/', expressStaticGzip(path.join(__dirname, '../client'), {
     res.setHeader("Cache-Control", "client, max-age=31536000");
   }
 }));
-
-
-// server API requests start
+// CRUD Operations start
 app.get('/songDescription/:songId', async(req, res) => {
   try {
-    const description = await db.findDescription(req.params.songId);
-    if (!description) {
+    const { songId } = req.params;
+    const description = await pool.query("SELECT * FROM song WHERE song_id = $1;", [songId]);
+
+    if (!description.rows[0]) {
       return res.status(400).json({
         success: false,
         msg: `No description for songId: ${req.params.songId}`
@@ -40,7 +43,7 @@ app.get('/songDescription/:songId', async(req, res) => {
     }
     res.status(200).send({
       success: true,
-      data: description
+      data: description.rows[0]
     });
   } catch (error) {
     console.error(error);
@@ -52,38 +55,48 @@ app.get('/songDescription/:songId', async(req, res) => {
 });
 
 app.post('/songDescription', async(req, res) => {
-  // console.log(req.body);
   try {
-    const description = await db.saveDescriptions(req.body);
-    res.status(200).json({
+    const { description, bandName } = req.body;
+    const newDescription = await pool.query(
+      "INSERT INTO song (band_description, band_name) VALUES($1, $2) returning *",
+      [description, bandName]
+    );
+    res.status(200).send({
       success: true,
-      msg: 'create one song description',
-      data: description
+      data: newDescription.rows[0]
     });
   } catch (error) {
+    console.error(error);
     res.status(400).json({
       success: false,
-      msg: `something went wrong`,
-      error: error
+      msg: error
     });
   }
 });
 
 app.put('/songDescription/:songId', async(req, res) => {
   try {
-    const description = await db.findDescriptionandUpdate(req.params.songId, req.body, {
-      new: true,
-    });
-
-    if (!description) {
+    const { songId } = req.params;
+    const { description, bandName } = req.body;
+    const updateDescription = await pool.query(
+      "UPDATE song SET (band_description, band_name) = ($1, $2) WHERE song_id = $3",
+      [description, bandName, songId]
+    );
+    console.log(updateDescription);
+    if ( updateDescription.rowCount === 0 ) {
       return res.status(400).json({
         success: false,
         msg: `No description for songId: ${req.params.songId}`
       });
     }
+
     res.status(200).send({
       success: true,
-      data: description
+      data: {
+        song_id: songId,
+        band_description: description,
+        band_name: bandName
+      }
     });
   } catch (error) {
     console.error(error);
@@ -96,16 +109,20 @@ app.put('/songDescription/:songId', async(req, res) => {
 
 app.delete('/songDescription/:songId', async(req, res) => {
   try {
-    const description = await db.deleteDescription(req.params.songId);
-    if (!description) {
+    const { songId } = req.params;
+    const descriptionDelete = await pool.query("DELETE FROM song WHERE song_id = $1;", [songId]);
+
+    console.log(descriptionDelete);
+    if ( descriptionDelete.rowCount === 0 || descriptionDelete.deletedCount === 0 ) {
       return res.status(400).json({
         success: false,
-        msg: `No description for songId: ${req.params.songId}`
+        msg: `No description for songId: ${songId}`
       });
     }
+
     res.status(200).send({
       success: true,
-      data: description
+      data: `rows deleted: ${descriptionDelete.rowCount}`
     });
   } catch (error) {
     console.error(error);
@@ -116,7 +133,8 @@ app.delete('/songDescription/:songId', async(req, res) => {
   }
 });
 
-// server API requests end
+// CRUD operations end
+
 
 app.get('/:current', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/index.html'));
