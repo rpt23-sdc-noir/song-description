@@ -1,9 +1,11 @@
+require('newrelic');
 const express = require("express");
 const cors = require("cors");
 const path = require('path');
 const chalk = require('chalk');
 const pool = require('../database/db_pg.js');
 const port = 2001;
+// require('dotenv').config()
 
 const app = express();
 

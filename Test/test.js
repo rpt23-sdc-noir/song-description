@@ -62,7 +62,7 @@ describe('/PUT descriptions', () => {
 
 describe('/DELETE descriptions', () => {
   // have to update id for each test
-  const id = 10000033;
+  const id = 10000034;
 
   it('Should delete a song description by songId', (done) => {
     chai.request(app)
