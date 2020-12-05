@@ -11,11 +11,24 @@ class SongDescription extends React.Component {
       description: null
     }
     this.updateDescription = this.updateDescription.bind(this);
+    this.checkObject = this.checkObject.bind(this);
     this.getIdAndUpdateDOM = this.getIdAndUpdateDOM.bind(this);
   }
 
+  checkObject(data) {
+    if (typeof data === 'string') {
+      return JSON.parse(data)
+    } else {
+      return data
+    }
+  }
+
   updateDescription(data) {
+    // parse if its a string from redis
+    data = this.checkObject(data);
+
     console.log('Here is the data sent to updateDescription: ', data);
+
     this.setState({
       // mongo implementation
       // description: data.description

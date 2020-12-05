@@ -16,10 +16,10 @@
 config:
   target: "http://localhost:2001"
   phases:
-    - duration: 15
-      arrivalRate: 2
-      # over 15 seconds, 2 virtual user will make 100 requests per second each
-      # equaling 3000 total requests in 15 seconds
+    - duration: 5
+      arrivalRate: 100
+      # over 5 seconds, 100 virtual user will make 100 requests per second each
+      # equaling 5000 total requests in 5 seconds
   variables:
     productIds:
       - [ 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311,

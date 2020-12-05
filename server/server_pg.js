@@ -32,37 +32,42 @@ app.use('/', expressStaticGzip(path.join(__dirname, '../client'), {
   }
 }));
 
-//Middleware Function to Check Cache
+// Middleware Function to Check Cache
 checkCache = (req, res, next) => {
   const { songId } = req.params;
 
-  //get data value for key =id
+  //get data value for key =songId
   redis_client.get(songId, (err, data) => {
-      if (err) {
-          console.log(err);
-          res.status(500).send(err);
-      }
-      //if no match found
-      if (data != null) {
-          res.send(data);
-      }
-      else {
-          //proceed to next middleware function
-          next();
-      }
-   });
+    if (err) {
+      console.log(err);
+      res.status(500).send(err);
+    }
+    //if match found
+    if (data != null) {
+      res.status(200).send({
+        success: true,
+        // data: JSON.parse(data),
+        data: data
+      });
+    }
+    else {
+      //proceed to next middleware function
+      next();
+    }
+  });
 };
 
 // CRUD Operations start
 app.get('/songDescription/:songId', checkCache, async(req, res) => {
+// app.get('/songDescription/:songId', async(req, res) => {
   try {
     const { songId } = req.params;
     const description = await pool.query("SELECT * FROM song WHERE song_id = $1;", [songId]);
-    const descriptioData = description.rows[0];
+    const descriptionData = description.rows[0];
 
-    redis_client.setex(songId, 3600, JSON.stringify(descriptioData));
+    redis_client.setex(songId, 3600, JSON.stringify(descriptionData));
 
-    if (!descriptioData) {
+    if (!descriptionData) {
       return res.status(400).json({
         success: false,
         msg: `No description for songId: ${req.params.songId}`
@@ -70,7 +75,7 @@ app.get('/songDescription/:songId', checkCache, async(req, res) => {
     }
     res.status(200).send({
       success: true,
-      data: descriptioData
+      data: descriptionData
     });
   } catch (error) {
     console.error(error);
