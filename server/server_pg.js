@@ -54,7 +54,7 @@ checkCache = (req, res, next) => {
 };
 
 // CRUD Operations start
-app.get('/songDescription/:songId', async(req, res) => {
+app.get('/songDescription/:songId', checkCache, async(req, res) => {
   try {
     const { songId } = req.params;
     const description = await pool.query("SELECT * FROM song WHERE song_id = $1;", [songId]);
