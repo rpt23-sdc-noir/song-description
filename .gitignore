@@ -108,3 +108,6 @@ client/bundle.js.br
 client/bundle.js.gz
 
 seed.csv
+
+# redis
+dump.rdb
