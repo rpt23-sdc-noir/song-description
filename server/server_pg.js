@@ -6,8 +6,8 @@ const chalk = require('chalk');
 const pool = require('../database/db_pg.js');
 const port = 2001;
 
-const redis = require('redis')
-const redis_client = redis.createClient();
+// const redis = require('redis')
+// const redis_client = redis.createClient();
 
 const app = express();
 
@@ -33,39 +33,39 @@ app.use('/', expressStaticGzip(path.join(__dirname, '../client'), {
 }));
 
 // Middleware Function to Check Cache
-checkCache = (req, res, next) => {
-  const { songId } = req.params;
+// checkCache = (req, res, next) => {
+//   const { songId } = req.params;
 
-  //get data value for key =songId
-  redis_client.get(songId, (err, data) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send(err);
-    }
-    //if match found
-    if (data != null) {
-      res.status(200).send({
-        success: true,
-        // data: JSON.parse(data),
-        data: data
-      });
-    }
-    else {
-      //proceed to next middleware function
-      next();
-    }
-  });
-};
+//   //get data value for key =songId
+//   redis_client.get(songId, (err, data) => {
+//     if (err) {
+//       console.log(err);
+//       res.status(500).send(err);
+//     }
+//     //if match found
+//     if (data != null) {
+//       res.status(200).send({
+//         success: true,
+//         // data: JSON.parse(data),
+//         data: data
+//       });
+//     }
+//     else {
+//       //proceed to next middleware function
+//       next();
+//     }
+//   });
+// };
 
 // CRUD Operations start
-app.get('/songDescription/:songId', checkCache, async(req, res) => {
-// app.get('/songDescription/:songId', async(req, res) => {
+// app.get('/songDescription/:songId', checkCache, async(req, res) => {
+app.get('/songDescription/:songId', async(req, res) => {
   try {
     const { songId } = req.params;
     const description = await pool.query("SELECT * FROM song WHERE song_id = $1;", [songId]);
     const descriptionData = description.rows[0];
 
-    redis_client.setex(songId, 3600, JSON.stringify(descriptionData));
+    // redis_client.setex(songId, 3600, JSON.stringify(descriptionData));
 
     if (!descriptionData) {
       return res.status(400).json({
