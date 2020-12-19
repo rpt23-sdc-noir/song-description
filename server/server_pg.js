@@ -11,6 +11,13 @@ const port = 2001;
 
 const app = express();
 
+const router = express.Router();
+
+//  router.get('/loaderio-cc9de0789f2b357637d67483cf91c298', (req, res) => {
+//     console.log("in client");
+//     res.sendFile('../client/loaderio-cc9de0789f2b357637d67483cf91c298.txt');
+// });
+
 // middleware
 app.use(cors());
 app.use(express.json());
@@ -23,6 +30,9 @@ app.get('/bundle.js', cors(), (req, res) => {
   res.sendFile(path.join(__dirname, '../client/bundle.js'));
 });
 app.use('/:songId', express.static(path.join(__dirname, '../client')));
+
+// app.use('/', express.static(path.join(__dirname, '../client')));
+
 
 app.use('/', expressStaticGzip(path.join(__dirname, '../client'), {
   enableBrotli: true,
